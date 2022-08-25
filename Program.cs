@@ -25,6 +25,8 @@
                     }
                 case "4":
                     {
+
+                        TestTask.Task_four();
                         break;
                     }
                 case "5":

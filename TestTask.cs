@@ -23,5 +23,100 @@ namespace TeskTaskForMTS
             //... custom application code
 
         }
+        public static void TestValueToTaskFour( ref int sortFactor, ref int maxValue, ref int length)
+        {
+            int LimitSortFactor = 2000;
+            int LimitMaxValue = 2000;
+            int LimitLength = 1000000000;
+            Console.WriteLine("Введите  максимально возможное значение элемента в потоке не более 2000 ");
+            maxValue = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите значение упорядоченности потока не более чем maxValue");
+            sortFactor = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите максимальное количество элементов потока не превышая миллиарда");
+            length = Convert.ToInt32(Console.ReadLine());
+
+        }
+        public static void Task_four()
+        {
+            List<int> inputStream = new List<int>();
+            int sortFactor = 0;
+            int maxValue = 0;
+            int length = 0;
+            TestValueToTaskFour(ref sortFactor,ref maxValue,ref length);
+            Random random = new Random();
+            inputStream.Add(random.Next(0, maxValue + 1));
+            var prevValue = inputStream.ElementAt(0);
+            for (int i = 1; i < length; i++)
+            {
+                int raz = prevValue - sortFactor;
+                if (raz < 0)
+                    raz = 0;
+                var curValue = random.Next(raz, maxValue + 1);
+                inputStream.Add(curValue);
+                prevValue = curValue;
+            }
+            foreach (var item in inputStream)
+            {
+                Console.Write($"{item} ");
+            }
+            Console.WriteLine("\n Sorted Stream");
+            foreach (var item in Sort(inputStream, sortFactor, maxValue))
+            {
+                Console.Write($"{item} ");
+            }
+            
+
+        }
+        public static IEnumerable<int> MergeSort(IEnumerable<int> values)
+        {
+            var inputStreamArray = values.ToArray();
+            if (inputStreamArray.Length!=0)
+            {
+                int[] buffer = new int[values.Count()];
+                MergeSortImpl(inputStreamArray, buffer, 0, values.Count() - 1);
+            }
+            return inputStreamArray;
+        }
+        public static void MergeSortImpl(int[] values, int[] buffer, int l, int r)
+        {
+            if (l < r)
+            {
+                int m = (l + r) / 2;
+                MergeSortImpl(values, buffer, l, m);
+                MergeSortImpl(values, buffer, m + 1, r);
+
+                int k = l;
+                for (int i = l, j = m + 1; i <= m || j <= r;)
+                {
+                    if (j > r || (i <= m && values[i] < values[j]))
+                    {
+                        buffer[k] = values[i];
+                        ++i;
+                    }
+                    else
+                    {
+                        buffer[k] = values[j];
+                        ++j;
+                    }
+                    ++k;
+                }
+                for (int i = l; i <= r; ++i)
+                {
+                    values[i] = buffer[i];
+                }
+            }
+        }
+        public static IEnumerable<int>  Sort(IEnumerable<int> inputStream, int sortFactor, int maxValue)
+        {
+            return MergeSort(inputStream);
+            /*
+             * Выбрал данный вид сортировки по 3 причинам:
+             * 1. худшее,среднее,лучшее время O(n*log n) - что даёт точное понимание сколько пользователю ждать времени, а не надеется на удачное попадание на опорный элемент, как у Хоара
+             * 2. Затраты памяти O(n), что хуже чем у сортировки "Расчёской" или шейкерной (O(1)), но тогда не жертвуется время алгоритма, так как у представленных видах сортировки есть шанс попасть на худшее время O(n2)
+             * 3. https://www.nookery.ru/how-to-sort-the-array/ и на https://habr.com/ru/post/335920/ были представлены отчёты о тестировании, где данная сортировка неплохо показала себя при частично отсортированном массиве.
+             *  на данных ресурсах представлены и другие виды сортировок которые по некоторым показателям и обходят мой выбор, но при изучении каждой из них были выявлены недостатки, которые показались достаточно важными для того, чтобы не выбирать их для данного задания.
+             */
+        }
+
     }
 }
