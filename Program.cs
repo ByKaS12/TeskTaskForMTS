@@ -22,6 +22,7 @@
                     }
                 case "3":
                     {
+                        TestTask.Task_Three();
                         break;
                     }
                 case "4":

@@ -166,5 +166,42 @@ namespace TeskTaskForMTS
 
          */
         }
+        public static IEnumerable<(T item, int? tail)> EnumerateFromTail<T>(IEnumerable<T> enumerable, int? tailLength)
+        {
+            if (tailLength == null || tailLength <= 0)
+                return new List<(T item, int? tail)>();
+
+            List<(T item, int? tail)> items = new List<(T item, int? tail)>();
+            int count = enumerable.Count();
+            if (tailLength >= count)
+            {
+                foreach (var item in enumerable)
+                {
+                    items.Add((item, --count));
+                }
+            }
+            else
+            {
+                int i = 0;
+                int? raznica = count - tailLength;
+                foreach (var item in enumerable)
+                {
+                    if(i >= raznica)
+                        items.Add((item, --tailLength));
+                    else
+                        items.Add((item, null));
+                    i++;
+                }
+            }
+            return items;
+            // Возможно ли реализовать такой метод выполняя перебор значений перечисления только 1 раз? Ответ: можно, что и демонстрируется в методе, если число отсчета больше количества элементов, то просто будет полный проход коллекции и отсчётом
+            // Если же меньше, то пока разница количества и отсчёта не будет меньше или равна i , то записываем null, иначе tailLength-1
+        }
+
+        public static void  Task_Three()
+        {
+            int[] ints = new[] { 1, 2, 3, 4 };
+            var list = EnumerateFromTail(ints, 2);
+        }
     }
 }
