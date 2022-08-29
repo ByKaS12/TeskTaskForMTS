@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,15 +26,29 @@ namespace TeskTaskForMTS
         }
         public static void TestValueToTaskFour( ref int sortFactor, ref int maxValue, ref int length)
         {
-            int LimitSortFactor = 2000;
             int LimitMaxValue = 2000;
             int LimitLength = 1000000000;
             Console.WriteLine("Введите  максимально возможное значение элемента в потоке не более 2000 ");
             maxValue = Convert.ToInt32(Console.ReadLine());
+            if(maxValue>LimitMaxValue)
+            {
+                Console.WriteLine("Введено значение более 2000 ");
+                Task_four();
+            }
             Console.WriteLine("Введите значение упорядоченности потока не более чем maxValue");
             sortFactor = Convert.ToInt32(Console.ReadLine());
+            if (sortFactor > maxValue)
+            {
+                Console.WriteLine("Введено значение более значения maxValue ");
+                Task_four();
+            }
             Console.WriteLine("Введите максимальное количество элементов потока не превышая миллиарда");
             length = Convert.ToInt32(Console.ReadLine());
+            if (length > LimitLength)
+            {
+                Console.WriteLine("Введено значение более одного миллиарда ");
+                Task_four();
+            }
 
         }
         public static void Task_four()
@@ -117,6 +132,39 @@ namespace TeskTaskForMTS
              *  на данных ресурсах представлены и другие виды сортировок которые по некоторым показателям и обходят мой выбор, но при изучении каждой из них были выявлены недостатки, которые показались достаточно важными для того, чтобы не выбирать их для данного задания.
              */
         }
+        static readonly IFormatProvider _ifp = CultureInfo.InvariantCulture;
 
+
+        class Number
+        {
+            readonly int _number;
+
+            public Number(object number)
+            {
+                _number = Convert.ToInt32(number);
+            }
+            public static string operator +(Number n1, string n2) => new Number(n1._number + Convert.ToInt32(n2)).ToString();
+
+
+            public override string ToString() => _number.ToString(_ifp);
+
+        }
+
+        public static void Task_Two()
+        {
+            int someValue1 = 10;
+            int someValue2 = 5;
+            
+            string result = new Number(someValue1) + someValue2.ToString(_ifp);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+            /*
+             * Без изменений, результатом работы будет конкатинация 2 строк (10+5 = 105)
+             * После изменений, при разных значениях и типах переменных someValue1 и someValue2 обрабатывается сложение (10+5=15)
+
+
+         */
+        }
     }
 }

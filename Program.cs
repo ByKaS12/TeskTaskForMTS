@@ -17,6 +17,7 @@
                     }
                 case "2":
                     {
+                        TestTask.Task_Two();
                         break;
                     }
                 case "3":
