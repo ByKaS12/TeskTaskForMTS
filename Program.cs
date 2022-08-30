@@ -13,6 +13,7 @@
             {
                 case "1":
                     {
+                        TestTask.Task_One();
                         break;
                     }
                 case "2":
@@ -28,12 +29,12 @@
                 case "4":
                     {
 
-                        TestTask.Task_four();
+                        TestTask.Task_Four();
                         break;
                     }
                 case "5":
                     {
-                        TestTask.Task_five();
+                        TestTask.Task_Five();
                         break;
                     }
                 default:

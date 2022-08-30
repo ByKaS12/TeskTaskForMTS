@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace TeskTaskForMTS
 {
@@ -17,7 +18,7 @@ namespace TeskTaskForMTS
                 Console.SetOut(new StringWriter() { NewLine = "Слон" });
             }
         }
-        public static void Task_five()
+        public static void Task_Five()
         {
             TransformToElephant();
             Console.WriteLine("Муха");
@@ -33,25 +34,25 @@ namespace TeskTaskForMTS
             if(maxValue>LimitMaxValue)
             {
                 Console.WriteLine("Введено значение более 2000 ");
-                Task_four();
+                Task_Four();
             }
             Console.WriteLine("Введите значение упорядоченности потока не более чем maxValue");
             sortFactor = Convert.ToInt32(Console.ReadLine());
             if (sortFactor > maxValue)
             {
                 Console.WriteLine("Введено значение более значения maxValue ");
-                Task_four();
+                Task_Four();
             }
             Console.WriteLine("Введите максимальное количество элементов потока не превышая миллиарда");
             length = Convert.ToInt32(Console.ReadLine());
             if (length > LimitLength)
             {
                 Console.WriteLine("Введено значение более одного миллиарда ");
-                Task_four();
+                Task_Four();
             }
 
         }
-        public static void Task_four()
+        public static void Task_Four()
         {
             List<int> inputStream = new List<int>();
             int sortFactor = 0;
@@ -70,11 +71,8 @@ namespace TeskTaskForMTS
                 inputStream.Add(curValue);
                 prevValue = curValue;
             }
-            foreach (var item in inputStream)
-            {
-                Console.Write($"{item} ");
-            }
-            Console.WriteLine("\n Sorted Stream");
+
+            Console.WriteLine("\n Отсортированный поток");
             foreach (var item in Sort(inputStream, sortFactor, maxValue))
             {
                 Console.Write($"{item} ");
@@ -202,6 +200,34 @@ namespace TeskTaskForMTS
         {
             int[] ints = new[] { 1, 2, 3, 4 };
             var list = EnumerateFromTail(ints, 2);
+        }
+        static void FailProcess()
+        {
+            //Первый способ 
+            Process.GetCurrentProcess().Kill();
+            //Второй способ 
+            Environment.Exit(0);
+            //Третий способ
+            Environment.FailFast("Successful FailProccess");
+            //Четвертый  способ
+            string ProcessName = "Name of Proccess";
+            Process.GetProcessesByName(ProcessName).FirstOrDefault()?.Kill();
+            //Пятый  способ
+            int ProcessId = Environment.ProcessId; // Id of Proccess
+            Process.GetProcessById(ProcessId).Kill();
+
+
+        }
+        public static void Task_One()
+        {
+            try
+            {
+                FailProcess();
+            }
+            catch { }
+            Console.WriteLine("Failed to fail process!");
+            Console.ReadKey();
+
         }
     }
 }
